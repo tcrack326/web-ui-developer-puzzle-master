@@ -1,1 +1,1 @@
-export * from './lib/books-feature/books-feature.module';
+export * from './lib/books-feature.module';

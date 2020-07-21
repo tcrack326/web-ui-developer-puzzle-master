@@ -17,12 +17,12 @@ export const addToReadingList = createAction(
   props<{ book: Book }>()
 );
 
-export const failedAddToReadingList = createAction(
+export const addToReadingListError = createAction(
   '[Reading List] Failed add to list',
   props<{ book: Book }>()
 );
 
-export const confirmedAddToReadingList = createAction(
+export const addToReadingListSuccess = createAction(
   '[Reading List] Confirmed add to list',
   props<{ book: Book }>()
 );
@@ -32,12 +32,12 @@ export const removeFromReadingList = createAction(
   props<{ item: ReadingListItem }>()
 );
 
-export const failedRemoveFromReadingList = createAction(
+export const removeFromReadingListError = createAction(
   '[Reading List] Failed remove from list',
   props<{ item: ReadingListItem }>()
 );
 
-export const confirmedRemoveFromReadingList = createAction(
+export const removeFromReadingListSuccess = createAction(
   '[Reading List] Confirmed remove from list',
   props<{ item: ReadingListItem }>()
 );
