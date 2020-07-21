@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
@@ -7,8 +7,9 @@ import {
   ReadingListBook,
   searchBooks
 } from '@tmo/books/data-access';
-import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { fromEvent } from 'rxjs';
+import { distinctUntilChanged, debounceTime, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'tmo-book-search',
@@ -17,24 +18,29 @@ import { Book } from '@tmo/shared/models';
 })
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
-
-  searchForm = this.fb.group({
-    term: ''
-  });
-
+  searchTerm: string;
+  @ViewChild('bookSearchInput', { static: true }) bookSearchInput: ElementRef;
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
   ) {}
-
-  get searchTerm(): string {
-    return this.searchForm.value.term;
-  }
 
   ngOnInit(): void {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
+
+    this.listenToSearchInput();
+  }
+
+  listenToSearchInput() {
+    fromEvent(this.bookSearchInput.nativeElement, 'keyup').pipe(
+      map((event: any) => event.target.value),
+      filter(term => term.length > 2 || term.length === 0),
+      debounceTime(600),
+      distinctUntilChanged()
+    ).subscribe((searchTerm: string) => {
+      this.searchBooks(searchTerm);
+    })
   }
 
   formatDate(date: void | string) {
@@ -48,14 +54,16 @@ export class BookSearchComponent implements OnInit {
   }
 
   searchExample() {
-    this.searchForm.controls.term.setValue('javascript');
-    this.searchBooks();
+    this.bookSearchInput.nativeElement.value = 'javascript';
+    this.searchBooks('javascript');
   }
 
-  searchBooks() {
-    if (this.searchForm.value.term) {
-      this.store.dispatch(searchBooks({ term: this.searchTerm }));
+  searchBooks(searchTerm) {
+      if (searchTerm) {
+        this.searchTerm = searchTerm;
+      this.store.dispatch(searchBooks({ term: searchTerm }));
     } else {
+      this.searchTerm = '';
       this.store.dispatch(clearSearch());
     }
   }
