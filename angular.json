@@ -396,7 +396,7 @@
   },
   "cli": {
     "defaultCollection": "@nrwl/angular",
-    "analytics": false
+    "analytics": "c046b6de-6b43-47f3-a60a-5123eaddd213"
   },
   "schematics": {
     "@nrwl/angular:application": {
