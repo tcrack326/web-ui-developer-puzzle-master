@@ -1,7 +1,7 @@
 import { $, $$, browser, ExpectedConditions } from 'protractor';
 import { expect } from 'chai';
 
-describe('When: Use the search feature', () => {
+xdescribe('When: Use the search feature', () => {
   it('Then: I should be able to search books by title', async () => {
     await browser.get('/');
     await browser.wait(

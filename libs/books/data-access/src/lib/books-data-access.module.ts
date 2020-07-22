@@ -1,3 +1,4 @@
+import { SnackbarEffects } from './snackbar/snackbar.effects';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
@@ -15,7 +16,7 @@ import { ReadingListEffects } from './reading-list/reading-list.effects';
       fromReadingList.READING_LIST_FEATURE_KEY,
       fromReadingList.reducer
     ),
-    EffectsModule.forFeature([BooksEffects, ReadingListEffects])
+    EffectsModule.forFeature([BooksEffects, ReadingListEffects, SnackbarEffects])
   ]
 })
 export class BooksDataAccessModule {}

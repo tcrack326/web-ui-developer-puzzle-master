@@ -1,10 +1,12 @@
+import { showSnackbar } from './../snackbar/snackbar.actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
 import { fetch, optimisticUpdate } from '@nrwl/angular';
 import * as ReadingListActions from './reading-list.actions';
+import * as SnackbarActions from '../snackbar/snackbar.actions';
 import { HttpClient } from '@angular/common/http';
 import { ReadingListItem } from '@tmo/shared/models';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class ReadingListEffects implements OnInitEffects {
@@ -35,10 +37,16 @@ export class ReadingListEffects implements OnInitEffects {
       optimisticUpdate({
         run: ({ book }) => {
           return this.http.post('/api/reading-list', book).pipe(
-            map(() =>
+            switchMap(() => [
+              SnackbarActions.showSnackbar(
+                {
+                  message: `Added ${book.title} to your Reading list`,
+                  undoAction: () => ReadingListActions.removeFromReadingList({item: {bookId: book.id, ...book} })
+                }),
               ReadingListActions.addToReadingListSuccess({
                 book
               })
+            ]
             )
           );
         },
@@ -57,10 +65,17 @@ export class ReadingListEffects implements OnInitEffects {
       optimisticUpdate({
         run: ({ item }) => {
           return this.http.delete(`/api/reading-list/${item.bookId}`).pipe(
-            map(() =>
+            switchMap(() => [
+              SnackbarActions.showSnackbar(
+                {
+                  message: `Removed ${item.title} from your Reading list`,
+                  undoAction: () => ReadingListActions.addToReadingList({ book: {id: item.bookId, ...item } })
+                }
+              ),
               ReadingListActions.removeFromReadingListSuccess({
                 item
               })
+            ]
             )
           );
         },
