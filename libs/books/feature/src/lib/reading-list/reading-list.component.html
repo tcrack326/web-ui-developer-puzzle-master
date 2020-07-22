@@ -8,7 +8,7 @@
       <div class="reading-list-item--details--author">
         {{ b.authors.join(',') }}
       </div>
-      <div class="reading-list-item--details--finished" *ngIf="b.finished">
+      <div class="reading-list-item--details--finished" data-testing="finish-date" *ngIf="b.finished">
         Finished: {{ formatDate(b.finishedDate) }}
       </div>
     </div>
@@ -19,6 +19,7 @@
               [disabled]="b.finished"
               [attr.aria-label]="'Mark Book Finished'"
               (click)="markBookAsFinished(b)"
+              data-testing="finish-button"
             >
              <mat-icon>check_circle</mat-icon>
       </button>
