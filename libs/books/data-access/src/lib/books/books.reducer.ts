@@ -3,6 +3,7 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Book } from '@tmo/shared/models';
 
 import * as BooksActions from './books.actions';
+import * as ReadingListActions from '../reading-list/reading-list.actions';
 
 export const BOOKS_FEATURE_KEY = 'books';
 
@@ -40,7 +41,13 @@ const booksReducer = createReducer(
     ...state,
     error
   })),
-  on(BooksActions.clearSearch, state => booksAdapter.removeAll(state))
+  on(BooksActions.clearSearch, state => booksAdapter.removeAll(state)),
+  on(ReadingListActions.markBookAsFinishedSuccess, (state, action) => {
+    return booksAdapter.setOne({id: action.item.bookId, ...action.item }, state);
+  }),
+  on(ReadingListActions.removeFromReadingList, (state, action) => {
+    return booksAdapter.setOne({id: action.item.bookId, ...action.item, finished: false }, state);
+  })
 );
 
 export function reducer(state: State | undefined, action: Action) {
