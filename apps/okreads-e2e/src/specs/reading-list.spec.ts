@@ -41,14 +41,14 @@ describe('When: I undo an add/remove to my list feature', () => {
     searchItems = await $$('[data-testing="book-item"] button');
     searchItems[0].click();
   });
-  xit('should show a snackbar after adding to reading list', async () => {
+  it('should show a snackbar after adding to reading list', async () => {
     const snackbarButtons =  await $$('.mat-simple-snackbar-action .mat-button-wrapper');
     await browser.wait(
       ExpectedConditions.textToBePresentInElement(snackbarButtons[0], 'Undo')
     );
     snackbarButtons[0].click();
  });
-  xit('should show a snackbar with undo action to the reading list', async () => {
+  it('should show a snackbar with undo action to the reading list', async () => {
      const snackbarButton =  await $$('.mat-simple-snackbar-action .mat-button-wrapper');
      snackbarButton[0].click();
     expect(readingListItems.length).to.equal(0);
