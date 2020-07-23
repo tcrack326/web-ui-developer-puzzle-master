@@ -7,7 +7,7 @@
       placeholder="Search for books to add to your reading list"
       formControlName="term"
     />
-    <button mat-icon-button matSuffix>
+    <button mat-icon-button matSuffix [attr.aria-label]="'Search for books to add to your reading list'">
       <mat-icon>search</mat-icon>
     </button>
   </mat-form-field>
@@ -36,6 +36,7 @@
               color="primary"
               (click)="addBookToReadingList(b)"
               [disabled]="b.isAdded"
+              [attr.aria-label]="'Add ' + b.title + ' to reading list'"
             >
               Want to Read
             </button>

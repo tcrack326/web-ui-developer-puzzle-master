@@ -36,14 +36,14 @@ export class ReadingListEffects implements OnInitEffects {
         run: ({ book }) => {
           return this.http.post('/api/reading-list', book).pipe(
             map(() =>
-              ReadingListActions.confirmedAddToReadingList({
+              ReadingListActions.addToReadingListSuccess({
                 book
               })
             )
           );
         },
         undoAction: ({ book }) => {
-          return ReadingListActions.failedAddToReadingList({
+          return ReadingListActions.addToReadingListError({
             book
           });
         }
@@ -58,14 +58,14 @@ export class ReadingListEffects implements OnInitEffects {
         run: ({ item }) => {
           return this.http.delete(`/api/reading-list/${item.bookId}`).pipe(
             map(() =>
-              ReadingListActions.confirmedRemoveFromReadingList({
+              ReadingListActions.removeFromReadingListSuccess({
                 item
               })
             )
           );
         },
         undoAction: ({ item }) => {
-          return ReadingListActions.failedRemoveFromReadingList({
+          return ReadingListActions.removeFromReadingListError({
             item
           });
         }
