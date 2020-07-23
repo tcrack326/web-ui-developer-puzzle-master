@@ -40,6 +40,10 @@
   white-space: nowrap;
 }
 
+.reading-list-item--details--finished {
+  color: $pink-dark;
+}
+
 .empty {
   font-weight: 100;
   font-size: 1rem;
