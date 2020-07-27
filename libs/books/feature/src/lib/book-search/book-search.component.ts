@@ -10,6 +10,7 @@ import {
 import { Book } from '@tmo/shared/models';
 import { fromEvent } from 'rxjs';
 import { distinctUntilChanged, debounceTime, filter, map } from 'rxjs/operators';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'tmo-book-search',
@@ -19,9 +20,12 @@ import { distinctUntilChanged, debounceTime, filter, map } from 'rxjs/operators'
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
   searchTerm: string;
-  @ViewChild('bookSearchInput', { static: true }) bookSearchInput: ElementRef;
+  searchForm = this.fb.group({
+    term: ''
+  });
   constructor(
     private readonly store: Store,
+    private readonly fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +37,7 @@ export class BookSearchComponent implements OnInit {
   }
 
   listenToSearchInput() {
-    fromEvent(this.bookSearchInput.nativeElement, 'keyup').pipe(
+    this.searchForm.valueChanges.pipe(
       map((event: any) => event.target.value),
       filter(term => term.length > 2 || term.length === 0),
       debounceTime(600),
@@ -54,8 +58,7 @@ export class BookSearchComponent implements OnInit {
   }
 
   searchExample() {
-    this.bookSearchInput.nativeElement.value = 'javascript';
-    this.searchBooks('javascript');
+    this.searchForm.controls.term.setValue('javascript');
   }
 
   searchBooks(searchTerm) {
