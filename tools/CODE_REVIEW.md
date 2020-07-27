@@ -1,5 +1,5 @@
 # BOOKS CODE REVIEW
-
+- Subscriptions to observables were not unsubscribed causing memory leaks. I went through components making sure to start the subscription in the ngOnInit method and then to unsubscribe using the takeWhile operator to cancel the subscription when the component is destroyed.
 - 4 unit tests failed from 2 test suites. Code with failing tests should never be committed to master.
 - Reducers are missing and incorrect for handling actions around adding and removed books to reading list. There should be reducers for successful additions/removals to list and error reducers when something goes wrong.
 - Unit test coverage is very poor. A lot of functionality is not tested at all. Needs a lot more.
