@@ -38,10 +38,8 @@ export class BookSearchComponent implements OnInit {
 
   listenToSearchInput() {
     this.searchForm.valueChanges.pipe(
-      tap(val => console.log(val)),
       map(val => val.term),
       filter((term) => term.length > 2 || term.length === 0),
-      tap(term => console.log(term)),
       debounceTime(600),
       distinctUntilChanged()
     ).subscribe((searchTerm: string) => {
