@@ -9,7 +9,7 @@ import {
 } from '@tmo/books/data-access';
 import { Book } from '@tmo/shared/models';
 import { fromEvent } from 'rxjs';
-import { distinctUntilChanged, debounceTime, filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, filter, map, tap } from 'rxjs/operators';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
@@ -38,8 +38,10 @@ export class BookSearchComponent implements OnInit {
 
   listenToSearchInput() {
     this.searchForm.valueChanges.pipe(
-      map((event: any) => event.target.value),
-      filter(term => term.length > 2 || term.length === 0),
+      tap(val => console.log(val)),
+      map(val => val.term),
+      filter((term) => term.length > 2 || term.length === 0),
+      tap(term => console.log(term)),
       debounceTime(600),
       distinctUntilChanged()
     ).subscribe((searchTerm: string) => {
@@ -61,7 +63,7 @@ export class BookSearchComponent implements OnInit {
     this.searchForm.controls.term.setValue('javascript');
   }
 
-  searchBooks(searchTerm) {
+  searchBooks(searchTerm?) {
       if (searchTerm) {
         this.searchTerm = searchTerm;
       this.store.dispatch(searchBooks({ term: searchTerm }));
